@@ -1,5 +1,4 @@
 import requests
-from bs4 import BeautifulSoup
 
 BOT_TOKEN = "8651671485:AAE1uudOzDkBDvW2OaVrKQZoIomb5hxTSy4"
 CHAT_ID = 1160495820
@@ -10,25 +9,18 @@ def send(msg):
         data={"chat_id": CHAT_ID, "text": msg}
     )
 
-url = "https://haraj.com.sa/search/اراضي-للبيع-الرياض"
+# 🔥 روابط بحث مباشرة من حراج
+links = [
+    "https://haraj.com.sa/search/اراضي-للبيع-الرياض-السويدي",
+    "https://haraj.com.sa/search/اراضي-للبيع-الرياض-الشفا",
+    "https://haraj.com.sa/search/فلل-للبيع-الرياض-جنوب",
+]
 
-headers = {
-    "User-Agent": "Mozilla/5.0"
-}
+msg = "🔎 تحديث جديد من حراج:\n\n"
 
-res = requests.get(url, headers=headers)
-soup = BeautifulSoup(res.text, "html.parser")
+for link in links:
+    msg += link + "\n\n"
 
-ads = soup.find_all("a")
+msg += "📊 شروطك:\nسعر متر ≤ 2500\nمساحة ≤ 500\nشارع ≥ 15"
 
-count = 0
-
-for ad in ads:
-    text = ad.get_text()
-
-    if "الرياض" in text and ("ارض" in text or "فيلا" in text):
-        send(f"🔎 إعلان:\n{text}")
-        count += 1
-
-    if count >= 5:
-        break
+send(msg)
