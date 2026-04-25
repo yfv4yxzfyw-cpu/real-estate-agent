@@ -3,24 +3,33 @@ import requests
 BOT_TOKEN = "8651671485:AAE1uudOzDkBDvW2OaVrKQZoIomb5hxTSy4"
 CHAT_ID = 1160495820
 
+MAX_PPM = 2500
+
 def send(msg):
     requests.post(
         f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage",
         data={"chat_id": CHAT_ID, "text": msg}
     )
 
-# 🔥 روابط بحث مباشرة من حراج
-links = [
-    "https://haraj.com.sa/search/اراضي-للبيع-الرياض-السويدي",
-    "https://haraj.com.sa/search/اراضي-للبيع-الرياض-الشفا",
-    "https://haraj.com.sa/search/فلل-للبيع-الرياض-جنوب",
+# 🔥 بيانات مثال (تمثيل إعلانات)
+ads = [
+    {"title":"ارض السويدي","area":400,"price":800000},
+    {"title":"فيلا الشفا","area":450,"price":1200000},
+    {"title":"ارض رخيصة","area":420,"price":700000},
 ]
 
-msg = "🔎 تحديث جديد من حراج:\n\n"
+for ad in ads:
 
-for link in links:
-    msg += link + "\n\n"
+    ppm = ad["price"] / ad["area"]
 
-msg += "📊 شروطك:\nسعر متر ≤ 2500\nمساحة ≤ 500\nشارع ≥ 15"
+    if ppm <= MAX_PPM:
 
-send(msg)
+        msg = f"""
+🔥 فرصة محتملة!
+
+📍 {ad['title']}
+📐 {ad['area']} م
+💰 {ad['price']}
+📊 {ppm:.0f} / متر
+"""
+        send(msg)
