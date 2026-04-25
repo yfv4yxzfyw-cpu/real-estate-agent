@@ -1,42 +1,16 @@
 import requests
 
-BOT_TOKEN="
-BOT_TOKEN="8737038270:AAEprrM2beRSvTYOVshmM3oaOLpw2YdxPb4"
-CHAT_ID="1160495820"
+BOT_TOKEN = "حط_التوكن_الجديد_هنا"
 
-listings=[
-{
-"district":"السويدي",
-"area":400,
-"street":20,
-"price":800000,
-"type":"أرض"
-}
-]
+# يجيب آخر محادثة (chat_id) تلقائي
+res = requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/getUpdates").json()
 
-for item in listings:
+if not res["result"]:
+    print("❌ ما فيه محادثة - لازم تضغط Start للبوت")
+else:
+    chat_id = res["result"][-1]["message"]["chat"]["id"]
 
-    ppm=item["price"]/item["area"]
+    msg = "🔥 البوت شغال 100%"
+    url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
 
-    if ppm<=2500 and item["area"]<=500 and item["street"]>=15:
-
-        msg=f"""
-🔥 فرصة عقارية
-
-{item["type"]}
-{item["district"]}
-{item["area"]}م
-شارع {item["street"]}
-
-سعر المتر {ppm}
-"""
-
-        url=f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
-
-        requests.post(
-            url,
-            data={
-                "chat_id":CHAT_ID,
-                "text":msg
-            }
-        )
+    requests.post(url, data={"chat_id": chat_id, "text": msg})
